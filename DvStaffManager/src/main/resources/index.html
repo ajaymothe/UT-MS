@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Applicant Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> 
+addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Custom Theme files -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" /> 
+<!-- //Custom Theme files -->
+<!-- web font -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">--> 
+<!-- //web font -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+	function msg(){
+	var fields = {};
+$("#theForm").find(":input").each(function() {
+    // The selector will match buttons; if you want to filter
+    // them out, check `this.tagName` and `this.type`; see
+    // below
+    fields[this.name] = $(this).val();
+});
+var obj = {fields};
+console.log(obj);
+	 $.ajax({
+            type: "POST",
+            url: 'http://localhost:9091/api/get-cust-info',
+            async: true,
+            data: JSON.stringify(obj['fields']),
+            contentType: "application/json",
+			
+            complete: function (data) {
+            console.log(data);
+            wait = false;
+        }
+    });
+<!-- '{"apmt_ip_address" : "0.0.0.0","apmt_full_name" : "def","apmt_email_id" : "def@abc.com","apmt_phone_number" : "908975674","apmt_address" : "ebaskjeaf","apmt_loan_amount" : "200000","apmt_apli_status" : "DV","apmt_reject_reason" : "Data"}',	 -->
+	<!-- var fields = {}; -->
+<!-- $("#theForm").find(":input").each(function() { -->
+    <!-- // The selector will match buttons; if you want to filter -->
+    <!-- // them out, check `this.tagName` and `this.type`; see -->
+    <!-- // below -->
+    <!-- fields[this.name] = $(this).val(); -->
+<!-- }); -->
+<!-- var obj = {fields}; -->
+<!-- var data = JSON.stringify($('form').serialize()); -->
+<!-- console.log(data); -->
+<!-- var url='http://localhost:8080/api/get-cust-info'; -->
+	  	<!-- var xhr = new XMLHttpRequest();//createCORSRequest('POST', url); -->
+		<!-- xhr.open('POST',url,true); -->
+		<!-- xhr.send(data); -->
+}
+function onSubmit(){
+		var data = JSON.stringify($('form').serialize());  //  <----------- //don't submit
+	  	console.log(data);
+	  	var url='http://localhost:8080/api/get-cust-info';
+	  	var xhr = new XMLHttpRequest();//createCORSRequest('POST', url);
+		xhr.setRequestHeader("Authorization", "Negotiate");
+		xhr.open('POST',url,true);
+		xhr.send(data);
+	}
+</script>
+</head>
+<body>
+	<!-- main -->
+	<div class="main-w3layouts wrapper">
+		<h1>Uangteman</h1>
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+				<form id='theForm' content="application/x-www-form-urlencoded" action="#" method="post" >
+					<label for="apmt_full_name">Applicant Name</label>
+					<input class="text" type="email" name="apmt_full_name" placeholder="Applicant Name" required="">
+					<label for="apmt_email_id">Email</label>
+					<input class="text email" type="text" name="apmt_email_id" placeholder="Email" required="">
+					<label for="apmt_phone_number">Phone Number</label><br/>
+					<input class="text" type="tel" name="apmt_phone_number" placeholder="Phone Number" required=""><br/>
+					<label for="apmt_address">Address</label>
+					<input class="text" type="text" name="apmt_address" placeholder="Address" required="">
+					<label for="apmt_loan_amount">Loan Amount</label>
+					</br><input class="text" type="number" name="apmt_loan_amount" placeholder="Loan Amount" required=""><br/>
+					<input type="button" value="SIGNUP" onclick="msg()">
+				</form>
+			</div>
+		</div>
+		<!-- copyright -->
+		<!-- //copyright -->
+		<ul class="colorlib-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- //main -->
+</body>
+</html>

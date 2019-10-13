@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - DvStaffManagerApplication",
+            "request": "launch",
+            "mainClass": "ut.microservices.Reconcile.DvStaffManagerApplication",
+            "projectName": "DvStaffManager"
+        }
+    ]
+}

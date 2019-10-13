@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Applicant Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> 
+addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" /> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style type="text/css">
+	.body{
+		align-items: center;
+
+	}
+	.gender{
+		width: : 7%;
+	}
+</style>
+<script>
+	function msg(){
+	var fields = {};
+		$("#theForm").find(":input").each(function() {
+	    fields[this.name] = $(this).val();
+	});
+	var obj = {fields};
+	console.log(obj);
+	$.ajax({
+	    type: "POST",
+	    url: 'http://localhost:9010/loan/saveapp',
+	    //async: true,
+	    data: JSON.stringify(obj['fields']),
+	    contentType: "application/json",
+	    success: function (data) {
+	    	if(data=="success"){
+	    		window.location="C:/Users/Ajay.Mothe/Desktop/UI/Reponse.html";	
+	    	}else{
+	    		window.alert(data);
+	    		returned=false;	
+	    	}
+		}
+	});
+}
+// function onSubmit(){
+// 		var fields = {};
+// 		$("#theForm").find(":input").each(function() {
+// 	    fields[this.name] = $(this).val();
+// 		});
+// 		var obj = {fields};
+// 		var data = JSON.stringify(obj['fields']);  //  <----------- //don't submit
+// 	  	console.log(data);
+// 	  	returned=false;
+// 	 //  	var url='http://localhost:9010/loan/saveapp';
+// 	 //  	var xhr = new XMLHttpRequest();//createCORSRequest('POST', url);
+// 		// xhr.setRequestHeader("Authorization", "Negotiate");
+// 		// xhr.open('POST',url,true);
+// 		// xhr.send(data);
+// 	}
+</script>
+</head>
+<body>
+	<div class="form-style-10">
+<h1>UANGTEMAN</h1>
+<form id='theForm' content="application/json" method="post">
+    <div class="section"><span>1</span>Registration Form</div>
+        <label>Your Full Name <input class="text" type="text" name="apmt_full_name" placeholder="Applicant Name" required=""/></label><br/>
+        <label>Address <input class="text" type="text" name="apmt_address" placeholder="Address" required=""/></label><br/>
+    	<label>Email Address <input class="text email" type="email" name="apmt_email_id" placeholder="Email" required=""></label><br/>
+        <label>Phone Number <input class="text" type="number" name="apmt_phone_number" placeholder="Phone Number" required=""><br/></label>
+        <label>Date of Birth <input class="Date" type="Date" name="ap_dob" placeholder="Date of Birth" required=""/></label><br/>
+    	<label>Gender : <select name="ap_gender" required="">
+    		<option value="0" selected="default">-Select-</option>
+    		<option value="F">Female</option>
+    		<option value="M">Male</option>
+    	</select>
+    	</label><br/>
+        <label>Loan Amount <input class="text" type="number" name="apmt_loan_amount" placeholder="Loan Amount" required=""/><br/></label>
+    	<label>Tenure : <select name="loan_tenure" required="">
+    		<option value="0" selected="default">-Select-</option>
+    		<option value="15">15 Days</option>
+    		<option value="30">30 Days</option>
+    	</select>
+    	</label><br/>
+    		<!-- <input class="text" type="select" name="loan_tenure" placeholder="Applicant Name" required=""/> -->
+        <label>Bank Account No<input class="text" type="number" name="ap_bank_acnt_no" placeholder="Bank Account Number" required=""/><br/></label>
+    	<label>Bank IFSC<input class="text" type="number" name="ap_bank_ifsc" placeholder="Bank IFSC Code" required=""/><br/></label>
+
+    	<!-- <button onclick="msg()" class="button" type="submit" id="bb">SUBMIT</button> -->
+    </div>
+</form>
+<button onclick="msg()" class="button" type="submit" id="bb">SUBMIT</button>
+</div>
+</body>
+</html>

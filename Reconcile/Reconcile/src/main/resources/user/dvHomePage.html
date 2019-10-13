@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="css/tablecss.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="css/djeRex.scss" rel="stylesheet" media="all" />
+	<title>Data Verification Home Page</title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="./jput.min.js"></script>
+<script>
+    $( document ).ready(function() {
+      var stompClient = null;
+          var url='http://localhost:9090/api/notes';
+          var xhr = new XMLHttpRequest();//createCORSRequest('POST', url);
+          xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+      var datjson = JSON.parse(xhr.response);
+      console.log(datjson);
+      $("#tbody").jPut({
+              jsonData : datjson,
+              name:"tbody_template",
+      });
+    }
+
+    $('.editbtn').click(function () {
+      var data = [];
+          var currentTD = $(this).parents('tr').find('td');
+          if ($(this).html() == 'Edit') {                  
+              $.each(currentTD, function () {
+                  $(this).prop('contenteditable', true)
+              });
+          } else {
+             $.each(currentTD, function () {
+                  $(this).prop('contenteditable', false)
+              });
+          }
+          $(this).closest('tr').find('td').each(
+    function (i) {
+      data.push($(this)[0].innerHTML);
+    });
+          console.log(data);
+          $(this).html($(this).html() == 'Edit' ? 'Save' : save(data))
+
+      });
+};
+        xhr.open('GET',url,true);
+        xhr.send();
+    }); 
+
+    function showGreeting(message) {
+    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+  }
+
+
+    function save(data){
+      console.log(data);
+      var datajson = {
+        "apmt_id":data[0],
+        "apmt_full_name": data[1],
+        "apmt_email_id": data[2],
+        "apmt_phone_number": data[3],
+        "apmt_address": data[4],
+        "apmt_loan_amount": data[5]
+      };
+      
+      return 'Edit';
+    }
+    var socket = new SockJS('http://localhost:9090/gs-guide-websocket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/greetings', function (greeting) {
+            showGreeting(JSON.parse(greeting.body).content);
+        });
+    });
+</script>
+<body >
+	<div class="container">
+  <h2>Responsive Tables Using LI <small>Triggers on 767px</small></h2>
+  <!-- <ul class="responsive-table">
+    <li class="table-header">
+      <div class="col col-1">Name</div>
+      <div class="col col-2">E-Mail</div>
+      <div class="col col-3">Mobile</div>
+      <div class="col col-4">Loan Amount</div>
+    </li>
+    <li class="table-row">
+      <div class="col col-1">42235</div>
+      <div class="col col-2" data-label="Customer Name">John Doe</div>
+      <div class="col col-3" data-label="Amount">$350</div>
+      <div class="col col-4" data-label="Payment Status">Pending</div>
+    </li>
+    <li class="table-row">
+      <div class="col col-1" data-label="Job Id">42442</div>
+      <div class="col col-2" data-label="Customer Name">Jennifer Smith</div>
+      <div class="col col-3" data-label="Amount">$220</div>
+      <div class="col col-4" data-label="Payment Status">Pending</div>
+    </li>
+    <li class="table-row">
+      <div class="col col-1" data-label="Job Id">42257</div>
+      <div class="col col-2" data-label="Customer Name">John Smith</div>
+      <div class="col col-3" data-label="Amount">$341</div>
+      <div class="col col-4" data-label="Payment Status">Pending</div>
+    </li>
+    <li class="table-row">
+      <div class="col col-1" data-label="Job Id">42311</div>
+      <div class="col col-2" data-label="Customer Name">John Carpenter</div>
+      <div class="col col-3" data-label="Amount">$115</div>
+      <div class="col col-4" data-label="Payment Status">Pending</div>
+    </li>
+  </ul> -->
+  <table>
+  <table jput="t_template">
+    <tbody jput="tbody_template">
+        <tr>
+            <th>Loan ID</th>
+            <th>Full Name</th>
+            <th>Email ID</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Loan Amount</th>
+          </tr>
+        <tr>
+            <td>{{apmt_id}}</td>
+            <td>{{apmt_full_name}}</td>
+            <td>{{apmt_email_id}}</td>
+            <td>{{apmt_phone_number}}</td>
+            <td>{{apmt_address}}</td>
+            <td>{{apmt_loan_amount}}</td>
+            <td><button class="editbtn">Edit</button></td>
+            <td><button class="editbtn">Accept</button></td>
+            <td><button class="editbtn">Reject</button></td>
+        </tr>
+    </tbody>
+   </table>
+  <table>
+    <tbody id="tbody">
+    </tbody>
+   </table>
+</div>
+</body>
+</html>

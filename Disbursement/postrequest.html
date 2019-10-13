@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="text/javascript">
+    var url='http://localhost:9012/ut/get-cust-info';
+    var xhr = new XMLHttpRequest();//createCORSRequest('POST', url);
+	xhr.open('GET',url,true);
+	xhr.send();
+	xhr.onreadystatechange=processRequest;
+	function processRequest(e){
+		if(xhr.readyState ==4 && xhr.status ==200){
+			var x, txt = "";
+			var data=JSON.parse(xhr.response);
+			console.log(data);
+//document.getElementById("origin").innerHTML=response[0].dmt_id;
+			txt += "<table >"
+			txt +="<th>Id</th><th>Loan Id</th><th>Loan Amount</th><th>Bank Id</th><th>email id</th><th>Disburse</th>";
+			for (x in data) {
+				txt +="<tr>";
+				txt +="<td align='center'>" + data[x].dmt_id+"</td>";
+				txt +="<td align='center'>" + data[x].dmt_loan_id+"</td>";
+				txt +="<td align='center'>" + data[x].dmt_loan_amount+"</td>";
+				txt +="<td align='center'>" + data[x].dmt_bank_id+"</td>";
+				txt +="<td align='center'>" + data[x].dmt_email_id+"</td>";
+				txt +="<td align='center'><input type=submit value='Disburse' id='"+data[x].dmt_loan_id+"' onclick='DisburseLoan(this.id)' style='width:100%'>"+"</td>";
+				txt += "</tr>";
+			}
+			txt += "</table>"    
+			document.getElementById("val").innerHTML = txt;
+			
+		}
+	}
+	function DisburseLoan(loan_id){
+		window.alert(loan_id);
+		var url='http://localhost:9012/ut/disbursed';
+    	var xhr = new XMLHttpRequest();
+		xhr.open('POST',url);
+		xhr.send(loan_id);
+	}
+	
+</script>
+
+</head>
+
+<body>
+<p id="val"></p>
+</body>
+</html>
